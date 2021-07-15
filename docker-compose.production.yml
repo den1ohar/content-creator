@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+      target: base
+    container_name: la-auth-server
+    command: npm run dev
+    restart: unless-stopped
+    environment:
+      - PORT=3002
+    #      - DB_NAME=
+    #      - DB_USER=
+    #      - DB_PASSWORD=
+    #      - DB_HOST=
+    #      - DB_PORT=
+    #- API_URL=http://api:3001/api
+    volumes:
+      - ./auth/src:/usr/src/app/src
+    networks:
+      - ca-network
+
+  auth_db:
+    image: postgres
+    container_name: la-auth-db
+    restart: unless-stopped
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: la-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - auth
+    networks:
+      - ca-network
+
+networks:
+  ca-network:
+    driver: bridge
