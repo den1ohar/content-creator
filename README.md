@@ -1,0 +1,5 @@
+# Structure
+
+- client
+- server
+- nginx
