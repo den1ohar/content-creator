@@ -29,13 +29,38 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - PORT=3001
-      - DB_HOST=host.docker.internal
-      - REDIS_HOST=host.docker.internal
+      PORT: 3001
+      REDIS_HOST: "host.docker.internal"
+      MYSQL_HOST: mysqldb
+      MYSQL_DATABASE: "cc_db"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_USER: "root"
+      MYSQL_PORT: 3306
+
     volumes:
       - ./server/src:/usr/src/app/src
     depends_on:
-      - redis
+      - "redis"
+      - "mysqldb"
+    networks:
+      - cc-network
+
+  mysqldb:
+    container_name: cc-mysql
+    image: mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      #MYSQL_HOST: "localhost"
+      MYSQL_DATABASE: "cc_db"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/lib/mysql
+      - ./scripts:/docker-entrypoint-initdb.d
     networks:
       - cc-network
 
@@ -44,17 +69,18 @@ services:
     image: "redis"
     ports:
       - "6379:6379"
+    networks:
+      - cc-network
 
   nginx:
     image: nginx:stable-alpine
     container_name: cc-nginx
     ports:
       - "80:80"
-      # - "5432:5432"
+
     volumes:
       - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
-    depends_on:
-      - server
+
     networks:
       - cc-network
 

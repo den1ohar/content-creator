@@ -1,7 +1,7 @@
-//import sequelize from "../database";
+import sequelize from "../database";
 import corsSetup from "./cors";
 // import routes from "../routes";
-// import models from "../models";
+import models from "../models";
 // import { ApiError } from "../middlewares";
 import sessionSetup from "./session";
 import session from "express-session";
@@ -18,17 +18,17 @@ class Server {
 
     this.config();
 
-    //this.models = models;
+    this.models = models;
     //routes.map((key) => this.app.use(key));
 
-    // this.connectDb()
-    //   .then(() => console.log("Connected to DB is successfully"))
-    //   .catch((e) => console.log("Database connected is error:", e));
+    this.connectDb()
+      .then(() => console.log("Connected to DB is successfully"))
+      .catch((e) => console.log("Database connected is error:", e));
   }
 
   private connectDb = async () => {
-    // await sequelize.authenticate();
-    //await sequelize.sync();
+    await sequelize.authenticate();
+    await sequelize.sync();
   };
 
   private config() {
