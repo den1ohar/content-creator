@@ -4,7 +4,10 @@ const { UUID, STRING } = DataTypes;
 
 const Content = sequelize.define("content", {
   id: { type: UUID, primaryKey: true },
-  text: { type: STRING }
+  textTitle: { type: STRING },
+  textParagraph: { type: STRING(1234) },
+  headTitle: { type: STRING },
+  headDesc: { type: STRING(1234) }
 });
 
 export default Content;

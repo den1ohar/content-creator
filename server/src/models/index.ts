@@ -13,3 +13,11 @@ import Content from "./Content";
 // ExerciseCondition.belongsTo(Exercise);
 
 export default { Content };
+
+/*
+- text title
+- text paragraph
+- image
+- head title
+- head description
+*/

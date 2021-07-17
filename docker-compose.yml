@@ -1,22 +1,22 @@
 version: "3"
 
 services:
-  client:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    command: npm run dev
-    container_name: client
-    stdin_open: true
-    tty: true
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/.next
-    networks:
-      - cc-network
+  # client:
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #     context: ./client
+  #   command: npm run dev
+  #   container_name: client
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./client:/usr/src/app
+  #     # - /usr/src/app/node_modules
+  #     # - /usr/src/app/.next
+  #   networks:
+  #     - cc-network
 
   server:
     build:

@@ -3,7 +3,7 @@ import PageWrapper from "@layouts/PageWrapper";
 import ContentInterfaceProps from "interfaces/ContentInterfaceProps";
 import ContentBlock from "@components/ContentBlock";
 
-const Home: React.FC = () => {
+const About: React.FC = () => {
   return (
     <div>
       <Head>
@@ -19,15 +19,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
-
-/*
-
-- URL
-- text title
-- text paragraph
-- image
-- head title
-- head description
-
-*/
+export default About;
