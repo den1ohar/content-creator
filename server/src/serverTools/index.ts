@@ -1,8 +1,7 @@
 import sequelize from "../database";
 import corsSetup from "./cors";
-// import routes from "../routes";
+import routes from "../routes";
 import models from "../models";
-// import { ApiError } from "../middlewares";
 import sessionSetup from "./session";
 import session from "express-session";
 const cors = require("cors");
@@ -19,7 +18,7 @@ class Server {
     this.config();
 
     this.models = models;
-    //routes.map((key) => this.app.use(key));
+    routes.map((key) => this.app.use(key));
 
     this.connectDb()
       .then(() => console.log("Connected to DB is successfully"))

@@ -17,7 +17,26 @@ services:
   #     # - /usr/src/app/.next
   #   networks:
   #     - cc-network
-
+  client-admin:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client-admin
+    command: npm run start
+    container_name: client-admin
+    stdin_open: true
+    tty: true
+    ports:
+      - "3005:3000"
+    environment:
+      REACT_APP_API_URL: "http://localhost:3001"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./client-admin:/usr/src/client-admin
+      - /usr/src/client-admin/node_modules
+    networks:
+      - cc-network
+    stdin_open: true
+    
   server:
     build:
       context: ./server
@@ -72,17 +91,17 @@ services:
     networks:
       - cc-network
 
-  nginx:
-    image: nginx:stable-alpine
-    container_name: cc-nginx
-    ports:
-      - "80:80"
+  # nginx:
+  #   image: nginx:stable-alpine
+  #   container_name: cc-nginx
+  #   ports:
+  #     - "80:80"
 
-    volumes:
-      - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
+  #   volumes:
+  #     - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
 
-    networks:
-      - cc-network
+  #   networks:
+  #     - cc-network
 
 networks:
   cc-network:

@@ -1,18 +1,10 @@
 import Content from "./Content";
+import Image from "./Image";
 
-// User.hasOne(UserCondition);
-// UserCondition.belongsTo(User);
+Content.hasOne(Image);
+Image.belongsTo(Content);
 
-// User.hasMany(Training);
-// Training.belongsTo(User);
-
-// Training.hasMany(Exercise);
-// Exercise.belongsTo(Training);
-
-// Exercise.hasMany(ExerciseCondition);
-// ExerciseCondition.belongsTo(Exercise);
-
-export default { Content };
+export default { Content, Image };
 
 /*
 - text title
