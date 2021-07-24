@@ -1,42 +1,64 @@
-import { ContentServices } from "../services";
+import { ContentServices, LanguageServices, PageServices } from "../services";
 
 class ContentController {
   async createContent(req, res) {
     try {
-      const newContent = await ContentServices.createNewContent(req.body);
+      const { language, page } = req.query;
 
-      return res.json({ data: newContent });
+      const currentPage = await PageServices.findOrCreatePage(page);
+
+      const currentLanguage = await LanguageServices.findOrCreateLanguage(
+        language
+      );
+
+      const pageId = currentPage.dataValues.id;
+      const languageId = currentLanguage.dataValues.id;
+
+      const content = await ContentServices.getContent(page, language);
+
+      if (content) {
+        return res.json({ data: null, message: "Content created before." });
+      }
+
+      const newContent = await ContentServices.createNewContent(
+        language,
+        page,
+        pageId,
+        languageId,
+        req.body
+      );
+
+      return res.json({
+        data: newContent,
+        message: "Content created successfully."
+      });
     } catch (e) {
       return res.json({ message: `${e}`, data: {} });
     }
   }
   async updateContent(req, res) {
     try {
-      const newContent = await ContentServices.updateContent(req.body);
+      const { language, page } = req.query;
 
-      return res.json({ data: newContent });
+      await ContentServices.updateContent(req.body, language, page);
+      const updatedContent = await ContentServices.getContent(page, language);
+
+      return res.json({
+        data: updatedContent,
+        message: "Content updated is succesfully."
+      });
     } catch (e) {
-      return res.json({ message: `${e}`, data: {} });
+      return res.json({ message: `${e}`, data: null });
     }
   }
   async getContent(req, res) {
+    const { language, page }: { language: string; page: string } = req.query;
     try {
-      const content = await ContentServices.getContentByLanguage(
-        req.params.language
-      );
+      const content = await ContentServices.getContent(page, language);
 
-      return res.json({ data: content });
+      return res.json({ data: content, message: "Get content." });
     } catch (e) {
-      return res.json({ message: `${e}`, data: {} });
-    }
-  }
-  async uploadImage(req, res) {
-    try {
-      const content = await ContentServices.uploadImage(req.params.language);
-
-      return res.json({ data: content });
-    } catch (e) {
-      return res.json({ message: `${e}`, data: {} });
+      return res.json({ message: `${e}`, data: null });
     }
   }
 }

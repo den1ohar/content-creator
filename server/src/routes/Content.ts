@@ -1,10 +1,10 @@
 import Router from "express";
-import { ContentController } from "../controllers";
+import { ContentController, ImageController } from "../controllers";
 
 const router = Router();
 
-const { createContent, getContent, updateContent, uploadImage } =
-  ContentController;
+const { createContent, getContent, updateContent } = ContentController;
+const { uploadImage } = ImageController;
 
 router.post("/api/content", createContent);
 router.put("/api/content", updateContent);

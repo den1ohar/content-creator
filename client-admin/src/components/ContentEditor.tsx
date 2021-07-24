@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { TextField, Button } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import ImageLoader from "./ImageLoader";
 import ContentInterfaceProps from "../interfaces/ContentInterfaceProps";
@@ -8,21 +15,41 @@ import ContentInterfaceProps from "../interfaces/ContentInterfaceProps";
 interface IProps {
   content: ContentInterfaceProps | null;
   onSaveContent: (data: ContentInterfaceProps) => void;
+  pages: string[];
+  handleChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  page: string;
+  handleUpdateImage: (file: any) => void;
 }
 interface IFormInputs {
-  textTitle: string;
-  textParagraph: string;
-  headTitle: string;
-  headDesc: string;
+  textTitle: string | "";
+  textParagraph: string | "";
+  headTitle: string | "";
+  headDesc: string | "";
 }
 
-const ContentEditor: React.FC<IProps> = ({ content, onSaveContent }) => {
+const ContentEditor: React.FC<IProps> = ({
+  content,
+  onSaveContent,
+  handleChange,
+  page,
+  pages,
+  handleUpdateImage
+}) => {
   const classes = useStyles();
   const {
     handleSubmit,
     formState: { errors },
-    control
-  } = useForm<IFormInputs>();
+    control,
+    setValue,
+    reset
+  } = useForm<IFormInputs>({
+    defaultValues: {
+      textTitle: "",
+      textParagraph: "",
+      headTitle: "",
+      headDesc: ""
+    }
+  });
 
   const onSubmit: SubmitHandler<IFormInputs> = (
     data: ContentInterfaceProps
@@ -30,109 +57,138 @@ const ContentEditor: React.FC<IProps> = ({ content, onSaveContent }) => {
     onSaveContent(data);
   };
 
+  useEffect(() => {
+    if (content) {
+      setValue("textTitle", content.textTitle);
+      setValue("textParagraph", content.textParagraph);
+      setValue("headTitle", content.headTitle);
+      setValue("headDesc", content.headDesc);
+    } else {
+      reset({
+        textTitle: "",
+        textParagraph: "",
+        headTitle: "",
+        headDesc: ""
+      });
+    }
+  }, [content, setValue, reset]);
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      id="myForm"
-      className={classes.root}>
-      <Controller
-        name="textTitle"
-        control={control}
-        rules={{ required: true }}
-        defaultValue={content ? content.textTitle : ""}
-        render={({ field }) => (
-          <>
-            <TextField
-              label="Text title"
-              multiline
-              variant="outlined"
-              rows={4}
-              className={classes.inputGroup}
-              {...field}
-            />
-            {errors.textTitle?.type === "required" && (
-              <span className={classes.errorField}>Text title required</span>
-            )}
-          </>
-        )}
-      />
-      <Controller
-        name="textParagraph"
-        control={control}
-        rules={{ required: true }}
-        defaultValue={content ? content.textParagraph : ""}
-        render={({ field }) => (
-          <>
-            <TextField
-              label="Text paragraph"
-              multiline
-              variant="outlined"
-              rows={4}
-              className={classes.inputGroup}
-              {...field}
-            />
-            {errors.textParagraph?.type === "required" && (
-              <span className={classes.errorField}>
-                Text paragraph required
-              </span>
-            )}
-          </>
-        )}
-      />
-      <Controller
-        name="headTitle"
-        control={control}
-        rules={{ required: true }}
-        defaultValue={content ? content.headTitle : ""}
-        render={({ field }) => (
-          <>
-            <TextField
-              label="Head Title"
-              multiline
-              variant="outlined"
-              rows={4}
-              className={classes.inputGroup}
-              {...field}
-            />
-            {errors.headTitle?.type === "required" && (
-              <span className={classes.errorField}>Head title required</span>
-            )}
-          </>
-        )}
-      />
-      <Controller
-        name="headDesc"
-        control={control}
-        rules={{ required: true }}
-        defaultValue={content ? content.headDesc : ""}
-        render={({ field }) => (
-          <>
-            <TextField
-              label="Head description"
-              multiline
-              variant="outlined"
-              rows={4}
-              className={classes.inputGroup}
-              {...field}
-            />
-            {errors.headDesc?.type === "required" && (
-              <span className={classes.errorField}>
-                Head description required
-              </span>
-            )}
-          </>
-        )}
-      />
-      <ImageLoader />
-      <Button
-        type="submit"
-        form="myForm"
-        variant="contained"
-        color="primary"
-        className={classes.submitBtn}>
-        Save
-      </Button>
-    </form>
+    <div className={classes.root}>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-simple-select-label">Page</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label=""
+          className={classes.select}
+          value={page}
+          onChange={handleChange}>
+          {pages.map((value) => {
+            return (
+              <MenuItem key={value} value={value}>
+                {value}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+      <form onSubmit={handleSubmit(onSubmit)} id="myForm">
+        <Controller
+          name="textTitle"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <TextField
+                label="Text title"
+                multiline
+                variant="outlined"
+                rows={4}
+                className={classes.inputGroup}
+                {...field}
+              />
+              {errors.textTitle?.type === "required" && (
+                <span className={classes.errorField}>Text title required</span>
+              )}
+            </>
+          )}
+        />
+        <Controller
+          name="textParagraph"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <TextField
+                label="Text paragraph"
+                multiline
+                variant="outlined"
+                rows={4}
+                className={classes.inputGroup}
+                {...field}
+              />
+              {errors.textParagraph?.type === "required" && (
+                <span className={classes.errorField}>
+                  Text paragraph required
+                </span>
+              )}
+            </>
+          )}
+        />
+        <Controller
+          name="headTitle"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <TextField
+                label="Head Title"
+                multiline
+                variant="outlined"
+                rows={4}
+                className={classes.inputGroup}
+                {...field}
+              />
+              {errors.headTitle?.type === "required" && (
+                <span className={classes.errorField}>Head title required</span>
+              )}
+            </>
+          )}
+        />
+        <Controller
+          name="headDesc"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <TextField
+                label="Head description"
+                multiline
+                variant="outlined"
+                rows={4}
+                className={classes.inputGroup}
+                {...field}
+              />
+              {errors.headDesc?.type === "required" && (
+                <span className={classes.errorField}>
+                  Head description required
+                </span>
+              )}
+            </>
+          )}
+        />
+        <ImageLoader handleUpdateImage={handleUpdateImage} />
+        <Button
+          type="submit"
+          form="myForm"
+          variant="contained"
+          color="primary"
+          className={classes.submitBtn}>
+          {content ? "Edit" : "Save"}
+        </Button>
+      </form>
+    </div>
   );
 };
 
@@ -148,14 +204,22 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "0 2rem"
     },
     inputGroup: {
-      margin: "0.25rem 0.75rem 0.15rem"
+      margin: "0.25rem 0.75rem 1.5rem"
     },
     submitBtn: {
-      marginTop: "3rem"
+      marginTop: "2rem"
     },
     errorField: {
       marginBottom: "1rem",
       color: theme.palette.error.main
+    },
+    formControl: {
+      marginBottom: "1rem"
+    },
+    select: {
+      marginBottom: "1rem",
+      maxWidth: "150px",
+      width: "100%"
     }
   })
 );

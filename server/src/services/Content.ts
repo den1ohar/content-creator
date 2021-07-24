@@ -1,27 +1,28 @@
 import Content from "../models/Content";
 
 class ContentServices {
-  async createNewContent(arg) {
+  async createNewContent(
+    language: string,
+    page: string,
+    pageId: number,
+    languageId: number,
+    body: any
+  ) {
     try {
-      // const newTraining = await Training.create(
-      //   {
-      //     userId: id,
-      //     date,
-      //     name
-      //   },
-      //   {
-      //     returning: true,
-      //     plain: true
-      //   }
-      // );
-      // return {
-      //   data: newTraining,
-      //   message: "Training created is successfully."
-      // };
-
-      return {
-        data: arg
-      };
+      const newContent = await Content.create(
+        {
+          pageId,
+          languageId,
+          languageName: language,
+          pageName: page,
+          ...body
+        },
+        {
+          returning: true,
+          plain: true
+        }
+      );
+      return newContent;
     } catch (e) {
       return {
         data: null,
@@ -29,37 +30,38 @@ class ContentServices {
       };
     }
   }
-  async updateContent(data) {
-    return {
-      data
-    };
-  }
-  async getContentByLanguage(language) {
+  async updateContent(data, language: string, page: string) {
     try {
-      // const newTraining = await Training.create(
-      //   {
-      //     userId: id,
-      //     date,
-      //     name
-      //   },
-      //   {
-      //     returning: true,
-      //     plain: true
-      //   }
-      // );
-      // return {
-      //   data: newTraining,
-      //   message: "Training created is successfully."
-      // };
-
-      return {
-        data: language
-      };
+      await Content.update(
+        { ...data },
+        {
+          where: {
+            languageName: language,
+            pageName: page
+          }
+        }
+      );
     } catch (e) {
-      return {
-        data: null,
-        message: `${e}`
-      };
+      return e;
+    }
+  }
+  async getContent(page: string, language: string) {
+    try {
+      const content = await Content.findOne(
+        {
+          where: {
+            pageName: page,
+            languageName: language
+          }
+        },
+        {
+          returning: true,
+          plain: true
+        }
+      );
+      return content;
+    } catch (e) {
+      return e;
     }
   }
 

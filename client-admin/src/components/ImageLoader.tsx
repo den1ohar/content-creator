@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
 
-export default function ImageLoader() {
+interface IProps {
+  handleUpdateImage: (file: any) => void;
+}
+
+const ImageLoader: React.FC<IProps> = ({ handleUpdateImage }) => {
   const [open, setOpen] = useState(false);
 
   const onSaveImage = (files: any) => {
-    console.log("Files:", files[0]);
-    //  setOpen(false);
+    handleUpdateImage(files);
   };
   return (
     <div>
@@ -31,4 +34,6 @@ export default function ImageLoader() {
       />
     </div>
   );
-}
+};
+
+export default ImageLoader;

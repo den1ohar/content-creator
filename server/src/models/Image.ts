@@ -1,17 +1,17 @@
 import sequelize from "../database";
 import { DataTypes } from "sequelize";
-const { UUID, STRING, BLOB } = DataTypes;
+const { INTEGER, STRING } = DataTypes;
 
 const Image = sequelize.define("image", {
-  id: { type: UUID, primaryKey: true },
+  id: { type: INTEGER, autoIncrement: true, primaryKey: true },
   type: {
     type: STRING
   },
   name: {
     type: STRING
   },
-  data: {
-    type: BLOB("long")
+  path: {
+    type: STRING
   }
 });
 
