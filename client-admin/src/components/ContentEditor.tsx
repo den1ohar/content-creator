@@ -199,12 +199,12 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: "flex",
       flexDirection: "column",
-      padding: "2rem 1rem",
+      padding: "2rem 0",
       maxWidth: "350px",
       margin: "0 2rem"
     },
     inputGroup: {
-      margin: "0.25rem 0.75rem 1.5rem"
+      margin: "0.25rem 0 1.5rem"
     },
     submitBtn: {
       marginTop: "2rem"

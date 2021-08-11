@@ -12,6 +12,9 @@ const Image = sequelize.define("image", {
   },
   path: {
     type: STRING
+  },
+  contentId: {
+    type: INTEGER
   }
 });
 

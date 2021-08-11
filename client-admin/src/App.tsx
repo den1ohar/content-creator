@@ -18,11 +18,10 @@ import { AxiosResponse } from "axios";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: "flex",
-      justifyContent: "space-around"
+      display: "flex"
     },
     header: {
-      margin: "2rem 0",
+      padding: "2rem 1rem",
       display: "flex",
       justifyContent: "space-between"
     }

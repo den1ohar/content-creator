@@ -38,14 +38,15 @@ const updateContent = (data: any, language: string, page: string) => {
   });
 };
 
-const createImage = (file: any): AxiosPromise => {
+const createImage = (file: any, page: string): AxiosPromise => {
   var formData = new FormData();
   formData.append("image", file[0]);
 
   return axios.post(`${REACT_APP_API_URL}/api/content/image`, formData, {
     headers: {
       "Content-Type": "multipart/form-data"
-    }
+    },
+    data: page
   });
 };
 
