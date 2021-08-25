@@ -9,9 +9,7 @@ class ImageController {
       if (!data) {
         return res.json({ message: "Something went wrong.", data: null });
       }
-
       const image = await ImageServices.saveImage(data);
-
       return res.json({ message: "Image uploaded. ", data: image });
     } catch (e) {
       return res.json({ message: `${e}`, data: null });
