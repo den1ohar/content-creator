@@ -3,5 +3,5 @@ export default interface ContentControllerInterface {
   textParagraph: string;
   headTitle: string;
   headDesc: string;
-  image: any;
+  image?: any;
 }
