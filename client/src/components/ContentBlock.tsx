@@ -17,10 +17,9 @@ const ContentBlock: React.FC<ContentInterfaceProps> = ({
   textTitle = "Text Title",
   textParagraph = "Text Paragraph",
   headTitle = "Head Title",
-  headDesc = "Head Descriptions"
+  headDesc = "Head Descriptions "
 }) => {
   const classes = useStyles();
-
   return (
     <Container maxWidth="md">
       <Grid className={classes.root}>
@@ -30,7 +29,6 @@ const ContentBlock: React.FC<ContentInterfaceProps> = ({
         <Typography variant="body1" gutterBottom>
           {textParagraph}
         </Typography>
-        <br />
         <Typography variant="h4" component="h4" gutterBottom>
           {headTitle}
         </Typography>
