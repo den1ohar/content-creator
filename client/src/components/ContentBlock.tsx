@@ -17,7 +17,7 @@ const ContentBlock: React.FC<ContentInterfaceProps> = ({
   textTitle = "Text Title",
   textParagraph = "Text Paragraph",
   headTitle = "Head Title",
-  headDesc = "Head Descriptions "
+  headDesc = "Head Descriptions sas"
 }) => {
   const classes = useStyles();
   return (
